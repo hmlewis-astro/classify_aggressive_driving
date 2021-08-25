@@ -8,7 +8,7 @@ In this project, we seek to **determine what aspects (features) of a driver's be
 
 
 ### Data description:
-[UAH-DriveSet](http://www.robesafe.uah.es/personal/eduardo.romera/uah-driveset/) is a public collection of driving data captured by a drive monitoring app, and comprises more than 30,000 observations [(Romera et al. 2016)](http://www.robesafe.uah.es/personal/eduardo.romera/pdfs/Romera16itsc.pdf). The data include both raw videos (these may be used for a deep learning project later in the bootcamp), as well as processed `.csv` files scoring and classifying each drive in the data set. The data are collected for various drivers in different driving environments, with varying driving styles (**classes**: non-aggressive/negative class, aggressive/positive class). The **features** recorded for each driver are scores for:
+[UAH-DriveSet](http://www.robesafe.uah.es/personal/eduardo.romera/uah-driveset/) is a public collection of driving data captured by a video drive monitoring smartphone app, and comprises more than 30,000 observations [(Romera et al. 2016)](http://www.robesafe.uah.es/personal/eduardo.romera/pdfs/Romera16itsc.pdf). The original source includes both raw videos (these may be used for a deep learning project later in the bootcamp), as well as processed `.csv` files scoring and classifying each drive in the data set. The data are collected for various drivers in different driving environments, with varying driving styles (**classes**: non-aggressive/negative class, aggressive/positive class). The **features** recorded for each driver are scores for:
 - acceleration
 - braking
 - turning
@@ -27,13 +27,13 @@ Weather conditions&mdash;specifically, precipitation (e.g., is it raining/snowin
 
 
 ### Tools:
-A majority of the relevant data is available via direct download; however, to scrape the associated hourly weather data, the `requests` and `BeautifulSoup` packages in Python will be utilized, along with Selenium and ChromeDriver to allow each Weather Underground page to fully load before scraping.
+A majority of the relevant data are available via direct download; however, to scrape the associated hourly weather data, the `requests` and `BeautifulSoup` packages in Python will be utilized, along with Selenium and ChromeDriver to allow each Weather Underground page to fully load before scraping.
 
 The scraped data will be stored in a `.csv` file, with rows corresponding for each scraped date-time. Both the downloaded data and the scraped data will be read in to python and manipulated using the `pandas` package. The `pandas` package will be used for initial exploratory data analysis and feature engineering.
 
 The classification models in `scikit-learn` will be used to build, validate, and test baseline and further expanded/refined models. If we find that the target class is imbalanced in the data set, we will also weight the classes or resample the data. In building these models, for driver safety, we will want to minimize computation time, as well as the number of false negative classifications (i.e., classifying a behavior as non-aggressive when it is).
 
-We will use the matplotlib package to create visualizations of the resulting model metrics and classification results.
+We will use the `matplotlib` package to create visualizations of the resulting model metrics and classification results.
 
 
 ### MVP:
