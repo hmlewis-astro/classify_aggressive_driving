@@ -5,10 +5,21 @@
 
 
 ### Question:
-
+What aspects (features) of a driver's behavior are most important for identifying (classifying) aggressive driving behavior?
 
 
 ### Data description:
+[UAH-DriveSet](http://www.robesafe.uah.es/personal/eduardo.romera/uah-driveset/) is a public collection of data captured by a drive monitoring app. The data are collected for various drivers in different driving environments, with varying driving styles (**classes**: normal, drowsy, aggressive). The **features** recorded for each driver are scores for:
+- acceleration
+- braking
+- turning
+- weaving (between lanes)
+- drifting (within lane)
+- speeding
+- following distance
+
+
+This dataset tries to facilitate progress in the field of driving analysis by providing a large amount of variables that were captured and processed by all the sensors and capabilities of a smartphone during independent driving tests. The application was run on 6 different drivers and vehicles, performing 3 different behaviors (normal, drowsy and aggressive) on two types of roads (motorway and secondary road), resulting in more than 500 minutes of naturalistic driving with its associated raw data and additional semantic information, together with the video recordings of the trips. You can download the dataset on the Download Section.
 
 
 ### Tools:
