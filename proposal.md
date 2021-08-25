@@ -1,7 +1,7 @@
 # Project Proposal
 ## Classification of Aggressive Driving Behavior from Smartphone Data
 
-
+The near-instantaneous analysis of driver behavior is an important part of the function and safety of semi-autonomous vehicles. For example, many semi-autonomous vehicles warn the driver if they are drifting from their lane or if the person ahead of them has suddenly slowed their speed. Therefore, using data from built-in car sensors&mdash;or, in this case, from a smartphone app&mdash;to also quickly classify driving behaviors as aggressive (and to then inhibit those behaviors) will further improve the safety of such vehicles, and may contribute to increased confidence in fully-autonomous vehicles.
 
 
 ### Question:
