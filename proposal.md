@@ -1,15 +1,15 @@
 # Project Proposal
 ## Classification of Aggressive Driving Behavior from Smartphone Data
 
-The near-instantaneous analysis of driver behavior is an important part of the function and safety of semi-autonomous vehicles. For example, many semi-autonomous vehicles warn the driver if they are drifting from their lane or if the person ahead of them has suddenly slowed their speed. Therefore, using data from built-in car sensors&mdash;or, in this case, from a smartphone app&mdash;to also quickly classify driving behaviors as aggressive (and to then inhibit those behaviors) will further improve the safety of such vehicles, and may contribute to increased confidence in fully-autonomous vehicles.
+The near-instantaneous analysis of driver behavior is an important part of the function and safety of semi-autonomous vehicles (i.e., vehicles with advanced driver assist systems). For example, many semi-autonomous vehicles are capable of warning/correcting the driver if they are drifting from their lane or if the person ahead of them has suddenly slowed their speed. Therefore, using data from built-in car sensors&mdash;or, in this case, from a smartphone app&mdash;to also quickly classify driving behaviors as aggressive (and to then inhibit those behaviors) will further improve the safety of such vehicles, and may lead to increased confidence in high- and fully-autonomous vehicles.
 
 
 ### Question:
-What aspects (features) of a driver's behavior are most important for identifying (classifying) aggressive driving behavior?
+In this project, we seek to **determine what aspects (features) of a driver's behavior are most important for identifying (classifying) aggressive driving behavior**.
 
 
 ### Data description:
-[UAH-DriveSet](http://www.robesafe.uah.es/personal/eduardo.romera/uah-driveset/) is a public collection of driving data captured by a drive monitoring app, and comprises more than 500 minutes of driving data [(Romera et al. 2016)](http://www.robesafe.uah.es/personal/eduardo.romera/pdfs/Romera16itsc.pdf). The data include both raw videos (these may be used for a deep learning project later in the bootcamp), as well as processed `.csv` files scoring and classifying each drive in the data set. The data are collected for various drivers in different driving environments, with varying driving styles (**classes**: non-aggressive/negative class, aggressive/positive class). The **features** recorded for each driver are scores for:
+[UAH-DriveSet](http://www.robesafe.uah.es/personal/eduardo.romera/uah-driveset/) is a public collection of driving data captured by a drive monitoring app, and comprises more than 30,000 observations [(Romera et al. 2016)](http://www.robesafe.uah.es/personal/eduardo.romera/pdfs/Romera16itsc.pdf). The data include both raw videos (these may be used for a deep learning project later in the bootcamp), as well as processed `.csv` files scoring and classifying each drive in the data set. The data are collected for various drivers in different driving environments, with varying driving styles (**classes**: non-aggressive/negative class, aggressive/positive class). The **features** recorded for each driver are scores for:
 - acceleration
 - braking
 - turning
@@ -32,9 +32,10 @@ A majority of the relevant data is available via direct download; however, to sc
 
 The scraped data will be stored in a `.csv` file, with rows corresponding for each scraped date-time. Both the downloaded data and the scraped data will be read in to python and manipulated using the `pandas` package. The `pandas` package will be used for initial exploratory data analysis and feature engineering.
 
-The classification models in `scikit-learn` will be used to build, validate, and test baseline and further expanded/refined models. If we find that the target class is imbalanced in the data set, we will also weight the classes or resample the data.
+The classification models in `scikit-learn` will be used to build, validate, and test baseline and further expanded/refined models. If we find that the target class is imbalanced in the data set, we will also weight the classes or resample the data. In building these models, for driver safety, we will want to minimize computation time, as well as the number of false negative classifications (i.e., classifying a behavior as non-aggressive when it is).
 
 We will use the matplotlib package to create visualizations of the resulting model metrics and classification results.
+
 
 ### MVP:
 
