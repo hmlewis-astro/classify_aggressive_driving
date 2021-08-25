@@ -9,7 +9,7 @@ What aspects (features) of a driver's behavior are most important for identifyin
 
 
 ### Data description:
-[UAH-DriveSet](http://www.robesafe.uah.es/personal/eduardo.romera/uah-driveset/) is a public collection of data captured by a drive monitoring app. The data are collected for various drivers in different driving environments, with varying driving styles (**classes**: normal, drowsy, aggressive). The **features** recorded for each driver are scores for:
+[UAH-DriveSet](http://www.robesafe.uah.es/personal/eduardo.romera/uah-driveset/) is a public collection of driving data captured by a drive monitoring app, and comprises more than 500 minutes of driving data [(Romera et al. 2016)](http://www.robesafe.uah.es/personal/eduardo.romera/pdfs/Romera16itsc.pdf). The data include both raw videos (these may be used for a deep learning project later in the bootcamp), as well as processed `.csv` files scoring and classifying each drive in the data set. The data are collected for various drivers in different driving environments, with varying driving styles (**classes**: non-aggressive/negative class, aggressive/positive class). The **features** recorded for each driver are scores for:
 - acceleration
 - braking
 - turning
@@ -18,8 +18,13 @@ What aspects (features) of a driver's behavior are most important for identifyin
 - speeding
 - following distance
 
-
-This dataset tries to facilitate progress in the field of driving analysis by providing a large amount of variables that were captured and processed by all the sensors and capabilities of a smartphone during independent driving tests. The application was run on 6 different drivers and vehicles, performing 3 different behaviors (normal, drowsy and aggressive) on two types of roads (motorway and secondary road), resulting in more than 500 minutes of naturalistic driving with its associated raw data and additional semantic information, together with the video recordings of the trips. You can download the dataset on the Download Section.
+Weather conditions&mdash;specifically, precipitation (e.g., is it raining/snowing?), temperature (e.g., is it below freezing/potentially icy?), and wind speed (e.g., are wind speeds high/dangerous?)&mdash;have an impact on whether a specific driving maneuver is classified as non-aggressive/aggressive. Because we have the date, time, and location of each recorded drive, we can obtain information on the weather conditions for each drive from Weather Underground, which retains historical daily and hourly observations of weather conditions for most major airports across the globe. The following **features** will be scraped from WUnderground for each drive in the data set:
+- temperature
+- wind speed
+- wind gust
+- precipitation
+- weather condition (e.g., clear, cloudy, foggy, light/heavy snow, etc.)
+- day/twilight/night
 
 
 ### Tools:
@@ -27,7 +32,7 @@ A majority of the relevant data is available via direct download; however, to sc
 
 The scraped data will be stored in a `.csv` file, with rows corresponding for each scraped date-time. Both the downloaded data and the scraped data will be read in to python and manipulated using the `pandas` package. The `pandas` package will be used for initial exploratory data analysis and feature engineering.
 
-The classification models in `scikit-learn` will be used to build, validate, and test baseline and further expanded/refined models. If we find that the target class is imbalanced in the dataset, we will also weight the classes or resample the data.
+The classification models in `scikit-learn` will be used to build, validate, and test baseline and further expanded/refined models. If we find that the target class is imbalanced in the data set, we will also weight the classes or resample the data.
 
 We will use the matplotlib package to create visualizations of the resulting model metrics and classification results.
 
