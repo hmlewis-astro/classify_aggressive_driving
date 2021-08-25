@@ -22,4 +22,4 @@ We will use the matplotlib package to create visualizations of the resulting mod
 
 ### MVP:
 
-The minimal viable product (MVP) for this project will likely be...
+The minimal viable product (MVP) for this project will likely be a few, simple, baseline classification models (e.g., logit, KNN, decision tree) including just a few features (e.g., acceleration and braking scores, following distance), so that we can begin to understand what the most important features will be in classifying driving behavior.
