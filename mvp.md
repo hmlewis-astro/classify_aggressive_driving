@@ -13,13 +13,10 @@ In expanding and refining these three models (KNN, decision tree, Random Forest)
 - DT: _max_depth_ from 5 to 20; _min_samples_split_ from 2 to 10; _min_samples_leaf_ from 1 to 5; _criterion_ as entropy or gini
 - RF: _max_depth_ from 5 to 20; _criterion_ as entropy or gini; _max_features_ as auto, sqrt, or log2
 
-The next figure (center) shows the residuals, and the last figure (right) shows the q-q plot. The q-q plot indicates that the predicted values are heavy-tailed, meaning that, in it's current form, the model does not correctly summarize the underlying relationship between the selected features and the target. To improve the model, I plan to transform the monetary target and features (i.e., domestic opening weekend gross, budget) to log scale.
+The figure below shows the ROC curve (based on the validation set) for the best estimator for each model type. Note, the _x_- and _y_-axes are formatted to show the upper left corner of the typical ROC curve; in this project, the AUC is large (approaching 1) for all three models, so to see the slight differences between the model, we need to zoom into this part of the plot.
 
 <p float="left" align="center">
-  <img src="figures/lr_basic.png" width="320" />
-  <img src="figures/lr_basic_resid.png" width="320" />
-  <img src="figures/lr_basic_qq.png" width="320" />
+  <img src="roc_curves_base.png" width="500" />
 </p>
 
-
-These results show that a significant proportion of the variance is explained by the current model; however, I hope to improve the R<sup>2</sup> by (1) log-scaling some of the features, (2) incorporating the studio and movie genres as dummy variables, and (3) testing LASSO and Ridge regression models to find the most important features in the model. Because I plan to use the resulting model to _interpret_ the impact of lead actor gender and age on lifetime movie gross, I am leaning towards using Ridge regression to avoid setting any of the coefficients of interest (i.e., lead actor age or gender) equal to 0.
+These results show that the Random Forest model (AUC = 0.9867, F2 = 0.9834) performs very well on the validation set; I have dropped the KNN and decision tree models from further consideration. As a next step, I plan to test a gradient boosted tree model (e.g., XGBoost) to compare with the Random Forest model.
