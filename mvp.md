@@ -16,7 +16,7 @@ In expanding and refining these three models (KNN, decision tree, Random Forest)
 The figure below shows the ROC curve (based on the validation set) for the best estimator for each model type. Note, the _x_- and _y_-axes are formatted to show the upper left corner of the typical ROC curve; in this project, the AUC is large (approaching 1) for all three models, so to see the slight differences between the model, we need to zoom into this part of the plot.
 
 <p float="left" align="center">
-  <img src="roc_curves_base.ng" width="500" />
+  <img src="roc_curves_base.png" width="500" />
 </p>
 
-These results show that the Random Forest model (AUC = 0.9867, F2 = 0.9834) performs very well on the validation set; I have dropped the KNN and decision tree models from further consideration. As a next step, I plan to test a gradient boosted tree model (e.g., XGBoost) to compare with the Random Forest model.
+These results show that the Random Forest model (AUC = 0.988, F2 = 0.983) performs very well on the validation set; I have dropped the KNN and decision tree models from further consideration. As a next step, I plan to test a gradient boosted tree model (e.g., XGBoost) to compare with the Random Forest model.
