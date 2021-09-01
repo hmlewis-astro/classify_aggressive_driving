@@ -8,6 +8,7 @@
 
 # Ignore data backups
 data_backup/
+UAH-DRIVESET-v1/
 
 # Ignore powerpoint files
 final_pres/*.pptx
