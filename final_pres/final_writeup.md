@@ -39,6 +39,7 @@ By combining the derived "heat index" and "crowd index" for each station, I calc
 
 #### Visualization
 
+https://user-images.githubusercontent.com/21116401/131949959-997e2c33-460a-4391-935d-35f6980834a9.mov
 
 ### Tools
 - Selenium, and BeautifulSoup for web scraping
