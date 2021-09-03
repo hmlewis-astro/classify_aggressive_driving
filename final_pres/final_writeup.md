@@ -23,18 +23,24 @@ I have also scraped weather conditions for the date, time, and location of each 
 
 ### Algorithms
 
-#### Cleaning, EDA, & Feature Engineering
-Given the NASA Landsat 8 image, the New York City Census block shapefile is used as reference to extract spectral radiances, and derive the median temperature within each Census block; outliers are replaced with the 1st and 99th percentile temperature values. From the observed temperature variations over the land area, a "heat index" in the range of 1 to 10 is calculated and assigned to each Census block, 10 being a land area with higher than median heat, 1 with lower than median heat.
+#### EDA & Feature Engineering
+EDA and feature engineering are carried out through the entirety of the modeling process.
 
-Given the SQL database containing MTA turnstile data, I created a new table within that database with the available geolocation information. Using SQLAlchemy in Python, these tables are joined (on the `booth`/`C/A` and `unit`) so that each turnstile now also has an associated latitude and longitude. From the database containing all turnstile data for the year 2018, only data collected during summer months (i.e., between 06/01/2018 and 08/31/2018) were selected for this analysis.
+The pair plot of a subset of the relevant features from the UAH-DriveSet reveal that the scores for normal driving behaviors generally have a higher median and a narrower (near Gaussian) distribution compared to the scores for abnormal driving behaviors, which show very broad, left-skewed distributions (i.e., tail toward very low scores). Based on the pair plot, I selected the acceleration, braking, and speeding scores&mdash;which appear to have distinct distributions in the kde plots&mdash;as the features utilized in the baseline models.
 
-I then calculated the time passed (in seconds) and the change in the turnstile `entries` counts between each reading; again, readings occur roughly every four hours. Here, there are two peculiarities in the data: (1) some turnstiles are counting backwards and (2) turnstiles appear to reset, leading to apparent increases in `entries` on the order of 10<sup>5</sup>-10<sup>7</sup> riders over just a few hours. To deal with these, I (1) always take the absolute value of the number of entries between measurements and (2) set an upper limit of 3 entries per turnstile per second. The later of these allows for a dynamic upper-limit to be set for each observation, depending on the time between measurements, rather than setting a single upper-limit.
+From the change in latitude, longitude of each observation of a given drive, and the time between observations, I calculate the average speed over the interval (in miles per hour). Other features that _could not_ have been engineered from the given data, but may have been important features, might be the age of the driver and the speed limit of the roads driven.
+
+The classes in the dataset are relatively balanced (~40% negative class, ~60% positive class), so no resampling or class weighting techniques are apllied to these data.
 
 #### Modeling
+I generate baseline KNN, logistic regression, decision tree, and Random Forest models on a small number of features and a subsample of the data (to improve training time), evaluating each model on the F2-score obtained on the validation set. The F-beta score, with beta > 2 (weighting recall more heavily than precision), is chosen because false negative predictions, where we misidentify abnormal driving behaviors, are potentially very dangerous in practice in an autonomous vehicle. Due to lower validation scores (logit), overfitting (decision tree), and lengthy prediction times (KNN), I ultimately select the Random Forest classifier. Each estimator in the Random Forest is grown deep (i.e., no max depth), and the number of estimators is approximated as the value at which at which the out-of-bag error stabilizes. We find that 150 estimators is sufficient to balance the increased variance due to the over-fitting of individual estimators.
+
+The final model is retrained on the training data (comprised of 80% of the full dataset) and includes features for acceleration, braking, turning, weaving (between lanes), drifting (within lane), speeding, and following distance scores, as well as the speed (in mph), the type of road driven (highway vs. secondary), and whether it was day or night during the drive. The resulting model attains F2 = 0.9925 on the test data. Feature importances are extracted and the trained model is pickled for use in an interactive notebook.
+
 
 
 #### Visualization
-To allow interaction with the model (and to simulate how the model might behave if implemented in a semi-autonomous vehicle), we have created a publicly available Jupyter Binder: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/hmlewis-astro/classify_aggressive_driving/HEAD?filepath=final_class_model.ipynb)
+To allow interaction with the model (and to simulate how the model might behave if implemented in a semi-autonomous vehicle), I have created a publicly available Jupyter Binder: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/hmlewis-astro/classify_aggressive_driving/HEAD?filepath=final_class_model.ipynb)
 
 The video below uses that Binder to  simulate what it might look like if someone is drowsy driving, and starts to drift within their lane. As the driver's drifting score decreases (such that the predicted class probability falls below the threshold), the model classifies the driving behavior as abnormal, and at that point the vehicle might flash a red warning light to notify the driver that something about their driving appears to be abnormal.
 
