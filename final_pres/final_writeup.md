@@ -23,21 +23,20 @@ I have also scraped weather conditions for the date, time, and location of each 
 
 ### Algorithms
 
-#### Cleaning & EDA
+#### Cleaning, EDA, & Feature Engineering
 Given the NASA Landsat 8 image, the New York City Census block shapefile is used as reference to extract spectral radiances, and derive the median temperature within each Census block; outliers are replaced with the 1st and 99th percentile temperature values. From the observed temperature variations over the land area, a "heat index" in the range of 1 to 10 is calculated and assigned to each Census block, 10 being a land area with higher than median heat, 1 with lower than median heat.
 
 Given the SQL database containing MTA turnstile data, I created a new table within that database with the available geolocation information. Using SQLAlchemy in Python, these tables are joined (on the `booth`/`C/A` and `unit`) so that each turnstile now also has an associated latitude and longitude. From the database containing all turnstile data for the year 2018, only data collected during summer months (i.e., between 06/01/2018 and 08/31/2018) were selected for this analysis.
 
 I then calculated the time passed (in seconds) and the change in the turnstile `entries` counts between each reading; again, readings occur roughly every four hours. Here, there are two peculiarities in the data: (1) some turnstiles are counting backwards and (2) turnstiles appear to reset, leading to apparent increases in `entries` on the order of 10<sup>5</sup>-10<sup>7</sup> riders over just a few hours. To deal with these, I (1) always take the absolute value of the number of entries between measurements and (2) set an upper limit of 3 entries per turnstile per second. The later of these allows for a dynamic upper-limit to be set for each observation, depending on the time between measurements, rather than setting a single upper-limit.
 
-#### Aggregation
-The cleaned MTA data are then aggregated by station and linename, such that the net entries over the observed three month period can be derived. From the net entries, a "crowd index" in the range of 1 to 10 is calculated for each station, 10 being the most crowded, 1 being the least.
+#### Modeling
 
-The MTA and heat data are then joined together based on the spatial location of each station.
-
-By combining the derived "heat index" and "crowd index" for each station, I calculate a "risk index" (again, scaled from 1 to 10, with 10 being high risk) for heat-illness at each station.
 
 #### Visualization
+To allow interaction with the model (and to simulate how the model might behave if implemented in a semi-autonomous vehicle), we have created a publicly available Jupyter Binder: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/hmlewis-astro/classify_aggressive_driving/HEAD?filepath=final_class_model.ipynb)
+
+The video below uses that Binder to  simulate what it might look like if someone is drowsy driving, and starts to drift within their lane. As the driver's drifting score decreases (such that the predicted class probability falls below the threshold), the model classifies the driving behavior as abnormal, and at that point the vehicle might flash a red warning light to notify the driver that something about their driving appears to be abnormal.
 
 https://user-images.githubusercontent.com/21116401/131949959-997e2c33-460a-4391-935d-35f6980834a9.mov
 
