@@ -40,7 +40,6 @@ By combining the derived "heat index" and "crowd index" for each station, I calc
 #### Visualization
 
 
-
 ### Tools
 - Selenium, and BeautifulSoup for web scraping
 - Pandas and Numpy for data analysis and exploration
