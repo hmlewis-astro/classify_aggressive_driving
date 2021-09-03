@@ -9,15 +9,16 @@ The goal of this project was to classify driving behaviors as normal or abnormal
 
 ### Design
 
-This project comes at the request of the New York City Department of Health; for an upcoming press release concerning summer heat, the Department wants to compile a list of MTA stations that pose the greatest risk to people at high-risk for heat-related illnesses. Because heat stress and heat-related illnesses are exacerbated by conditions that are incredibly crowded (in addition to extremely hot), they want to understand which stations are most impacted by _both of these factors_ (i.e., heat and crowds). By providing daily subway users with this information, the Department hopes to prevent a spike in heat-related illnesses this summer, and allow MTA riders to make informed decisions regarding their subway use during future heat waves.
+The near-instantaneous analysis of driver behavior is an important part of the function and safety of semi-autonomous vehicles (i.e., vehicles with advanced driver assist systems). For example, many semi-autonomous vehicles are capable of warning/correcting the driver if they are drifting from their lane or if the person ahead of them has suddenly slowed their speed. Therefore, using data from built-in car sensors&mdash;or, in this case, from a smartphone app&mdash;to also quickly classify driving behaviors as aggressive (and to then warn drivers about those behaviors) will further improve the safety of such vehicles, and may lead to increased confidence in high- and fully-autonomous vehicles.
+
+In this project, we seek to determine what aspects of a driver's behavior are most important for identifying aggressive driving behavior.
 
 ### Data
 
-#### Heat data
-Satellite imagery of New York City (with <1% cloud cover) was captured during Summer 2018 by the NASA Landsat 8 satellite. This image, downloaded from [Earth Explorer](https://earthexplorer.usgs.gov/), captured a roughly 185 km by 180 km (114 mi by 112 mi) image of the land area in 11 spectral bands (file size ~70 MB); for each image pixel, brightness measurements in multiple bands can be combined (via known relations; see Algorithms section below) to derive precise land temperature measurements. Surface temperatures can be estimated with 30 meter spatial resolution.
+The UAH-DriveSet provides scores (i.e., features) for acceleration, braking, turning, weaving (between lanes), drifting (within lane), speeding, and following distance, as well as the driving style that a driver was simulating (normal vs. abnormal; i.e., the target) during each drive. Drives are recorded for a range of driving styles (normal vs. abnormal, including aggressive and drowsy), in a variety of environments (day vs. night, on highways vs. secondary roads).
 
-#### Crowd-size data
-The MTA publishes weekly turnstile data that provides transit ridership as measured by turnstile entries and exits, with readings taken approximately every 4 hours. Though data is available going back to 2010, the database utilized here contains ridership data only for the year of 2018 (to correspond with the captured satellite imagery; ~10.3M rows, file size ~800 MB). Geolocations (i.e., latitude, longitude coordinates) for most MTA stations are collected from a publicly available [datafile](https://github.com/chriswhong/nycturnstiles/blob/master/geocoded.csv), though some stations were added by-hand to the [file available in this repo](https://github.com/hmlewis-astro/mta_analysis/blob/main/geocoded.csv).
+
+I have also scraped weather conditions for the date, time, and location of each recorded drive, from Weather Underground. A multitude of weather data are scraped; however, the drives collected in this dataset were recorded only at times when there was no precipitation, when the temperature was above freezing, and when conditions were fair (i.e., low winds, low cloud cover). Therefore, on the whole, weather conditions do not vary significantly between drives. The only parameter scraped from Weather Underground that varies significantly between the various drives in the dataset is whether it is day or night.
 
 
 ### Algorithms
@@ -37,26 +38,16 @@ The MTA and heat data are then joined together based on the spatial location of 
 By combining the derived "heat index" and "crowd index" for each station, I calculate a "risk index" (again, scaled from 1 to 10, with 10 being high risk) for heat-illness at each station.
 
 #### Visualization
-Maps of the stations colored by the various indices presented here are created.
 
-Example: A map of New York City's subway stations, where each station location is colored by its "risk index", which considers heat-illness risk due to both high heat and large crowds. Redder colors indicate higher-risk stations.
-
-<p align="center">
-<img src="https://github.com/hmlewis-astro/mta_analysis/blob/main/heat_data/data/output/analysis_out/final/plots/new-york-station-risk-index.png" width="600" />
-</p>
 
 
 ### Tools
-- SQLAlchemy for querying SQL database in Python
-- Mapshapper (employed by pre-packaged analysis algorithms by the USGS) for creating and altering geographic databases
-- Pandas, GeoPandas, and Numpy for data analysis
-- GeoPandas for handling and plotting geographic data
-- Matplotlib and Tableau for plotting and interactive visualizations
+- Selenium, and BeautifulSoup for web scraping
+- Pandas and Numpy for data analysis and exploration
+- Scikit-learn for building, tuning, training, and testing the various baseline and final models
+- Matplotlib and Seaborn for plotting and visualizations
+- IPywidgets and Binder for publicly available, interactive visualizations
 
 ### Communication
 
-In addition to the slides and visuals presented here, the Tableau dashboard [NYC MTA Heat](https://public.tableau.com/views/NYCMTAHeatAnalysis/Dashboard1?:language=en-US&publish=yes&:display_count=n&:origin=viz_share_link) will be included in a forthcoming blog post to be shared on my (work-in-progress) GitHub Pages [website](https://hmlewis-astro.github.io/).
-
-<p align="center">
-<img src="https://github.com/hmlewis-astro/mta_analysis/blob/main/final_pres/NYC_MTA_heat_dashboard.png" width="512" />
-</p>
+In addition to the slides and visuals presented here, the interactive Binder notebook will be included in a forthcoming blog post.
