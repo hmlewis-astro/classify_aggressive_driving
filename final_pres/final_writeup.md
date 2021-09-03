@@ -38,7 +38,7 @@ I generate baseline KNN, logistic regression, decision tree, and Random Forest m
 The final model is retrained on the training data (comprised of 80% of the full dataset) and includes features for acceleration, braking, turning, weaving (between lanes), drifting (within lane), speeding, and following distance scores, as well as the speed (in mph), the type of road driven (highway vs. secondary), and whether it was day or night during the drive. The resulting model attains F2 = 0.9925 on the test data. Feature importances (shown below) are extracted and the trained model is pickled for use in an interactive notebook.
 
 <p align="center">
-<img src="https://github.com/hmlewis-astro/classify_aggressive_driving/blob/main/figures/feature_importance.png" width="300" />
+<img src="https://github.com/hmlewis-astro/classify_aggressive_driving/blob/main/figures/feature_importance.png" width="420" />
 </p>
 
 #### Visualization
