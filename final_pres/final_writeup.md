@@ -1,138 +1,62 @@
 # Project Write-Up
-## The Problem with Pandemic Puppies: locating a new Chewy fulfillment facility
+## Classification of Aggressive Driving Behavior from Smartphone Data
 
 
 ### Abstract
 
-The ultimate goal of this project is to determine an ideal location for a Chewy fulfillment center. We hypothesize that understanding the density of pet-owning households per pet supply store, as well as total customer spend on Chewy products in each US county will allow us to determine an ideal location for the fulfillment center. We suggest building a geospatial clustering model to identify clusters of counties with (1) few pet supply retailers per pet-owning household and (2) high customer spend at Chewy. From our initial analysis, we find that pet owners in Mississippi, Louisiana, and Alabama&mdash;states along the Gulf Coast&mdash;have relatively fewer options in pet supply retailers than pet owners in other parts of the US. Additional data on Chewy customer spend in each US county is required to fully complete the proposed model, and determine an ideal location for the fulfillment center.
-
-
+The goal of this project was to classify driving behaviors as normal or abnormal (here, meaning either aggressive or drowsy driving), with the ultimate objective of implementing this model in a real-world, semi-autonomous vehicle. I utilized data from the [UAH-DriveSet](http://www.robesafe.uah.es/personal/eduardo.romera/uah-driveset/) to build a Random Forest classifier; the model is tuned to optimize the F2-score (weighting recall more heavily than precision), and attains F2 = 0.9925. After finalizing the model, I built an interactive Jupyter Binder to understand how the model classifications change with each feature from the data set.
 
 
 ### Design
 
-According to the [ASPCA](https://aspca.app.box.com/s/v4t7yrwalwk39mf71a857ivqoxnv2x3d), since the beginning of the COVID-19 pandemic, approximately one in five households in the US has acquired a new pet. This "pet boom" placed a serious strain on the supply chain of many pet supply companies; specifically, Chewy&mdash;an exclusively online retailer of pet food and pet-related products&mdash;[reported $20 million in extra fulfillment spend](https://news.alphastreet.com/chewy-inc-nyse-chwy-q1-2020-earnings-call-transcript/) during 2020 Q1. To prevent losses in the future, Chewy hopes to get ahead of further fulfillment and supply-chain breakdowns by opening another new fulfillment facility, and needs to determine where to locate this new facility.
-
-
-<details><summary>Impact hypothesis</summary>
-<p>
-
-We hypothesize that understanding the density of pet-owning households per pet supply store, as well as the total customer spend on Chewy products per capita &mdash;and how those metrics have changed since March 2020 (the start of the pandemic)&mdash;will allow us to determine an ideal location for the fulfillment center.
-
-**Primary impact:** determine an ideal location for the fulfillment center <br>
-**Secondary impacts:** prevent extra fulfillment spend (and therefore, increase net profits), decrease the fraction of late deliveries (i.e., longer than the promised, three-day delivery), decrease average order delivery time, increase customer satisfaction
-
-</p>
-</details>
-
-
-
-<details><summary>Solution paths</summary>
-<p>
-
-**Suggested solution path:**
-Determine the location based on a geospatial clustering model to predict future customer spend based on:
-- the number of pet-owning households,
-- the number of existing options available for in-person purchase of pet supplies,
-- the historical total customer spend (per capita) on Chewy products, and
-- how these factors have changed (e.g., increase/decrease of pet ownership) since March 2020.
-
-**Other possible paths:**
-- Determine the location (within the contiguous US) that would maximize the distance between all existing centers and the new fulfillment center
-- Analyze fulfillment data&mdash;e.g., the largest fraction of incorrect fulfillments and longest average order delivery time&mdash;to determine warehouses that might be at/over-capacity; locate new facility nearby (within 100 miles) the struggling facility
-- Rather than optimizing the location to be in a region with a lack of other pet supply stores, optimize to be in a competitive area (i.e., with a high number of pet-owning households, and many other pet supply options); potential to take business from other/smaller companies
-
-</p>
-</details>
-
-
-
-<details><summary>Measures of success</summary>
-<p>
-
-- Technical: model achieves a high silhouette score (how similar a datapoint is to other datapoints in its cluster, relative to datapoints not in its cluster) and identifies a reasonable location for the new fulfillment center (i.e., not too close to an existing fulfillment center, not in an area with very few pet-owning households)
-- Non-technical: amount of fulfillment spend above or below that of the previous quarter, amount of change in the fraction of late deliveries, amount of change in the average order delivery time
-
-</p>
-</details>
-
-
-
-<details><summary>Assumptions & risks</summary>
-<p>
-
-<table style="width:100%">
-  <tr>
-    <th>Assumptions</th>
-    <th>Risks</th>
-  </tr>
-  <tr>
-    <td>Observed increase in pet and pet supply spending since March 2020 will persist through the next wave of COVID-19 infections</td>
-    <td>If pet supply spending returns to pre-pandemic levels, new fulfillment center may be under-utilized and lead to a loss in net profits</td>
-  </tr>
-  <tr>
-    <td>Extra fulfillment centers are required to meet additional fulfillment needs</td>
-    <td>Slow delivery times might be due to one or more existing, understaffed facilities that simply require more fulfillment specialists</td>
-  </tr>
-  <tr>
-    <td>Location should depend on where there is a high density of pet-owning households per pet supply store (i.e., few pet supply stores to support the population)</td>
-    <td>Few pet supply stores in an area may mean that there is not a market for these products or that one particular store already has a monopoly on the market</td>
-  </tr>
-</table>
-
-</p>
-</details>
-
-
-<details><summary>Models</summary>
-<p>
-
-Given access to Chewy customer spend data, we will develop a geospatial clustering model (likely using K-means or density-based spatial clustering/DBSCAN) incorporating these data. The model will identify spatial clusters of US counties with similar characteristics in customer spend at Chewy _and_ the number of pet-owning households per pet supply store, rather than just the later (as done here).
-
-As a first step, we will compare with the results we have in hand, to see if those Gulf Coast states still stand out. That is, are they under-served by other pet supply retailers _and_ is customer spend high among pet-owners in that area?
-
-We will choose from among the clusters the one that appears to be most under-served by other pet supply retailers, and that has relatively high (and, ideally, increasing) customer spend at Chewy, and select a precise location within that cluster for the new fulfillment center (based on zoning, real-estate prices, work-force potential, etc).
-
-</p>
-</details>
-
+This project comes at the request of the New York City Department of Health; for an upcoming press release concerning summer heat, the Department wants to compile a list of MTA stations that pose the greatest risk to people at high-risk for heat-related illnesses. Because heat stress and heat-related illnesses are exacerbated by conditions that are incredibly crowded (in addition to extremely hot), they want to understand which stations are most impacted by _both of these factors_ (i.e., heat and crowds). By providing daily subway users with this information, the Department hopes to prevent a spike in heat-related illnesses this summer, and allow MTA riders to make informed decisions regarding their subway use during future heat waves.
 
 ### Data
 
-For the preliminary analysis presented here, we used data from the American Veterinary Medical Association (AVMA), which provides the total number of pet-owning households per state (within the contiguous US), along with data from the US Census (population per county), to estimate the **number of pet-owning households per county**.
+#### Heat data
+Satellite imagery of New York City (with <1% cloud cover) was captured during Summer 2018 by the NASA Landsat 8 satellite. This image, downloaded from [Earth Explorer](https://earthexplorer.usgs.gov/), captured a roughly 185 km by 180 km (114 mi by 112 mi) image of the land area in 11 spectral bands (file size ~70 MB); for each image pixel, brightness measurements in multiple bands can be combined (via known relations; see Algorithms section below) to derive precise land temperature measurements. Surface temperatures can be estimated with 30 meter spatial resolution.
 
-Data from the County Business Patterns (CBP) economic survey (carried out by the US Census Bureau, Business Statistics Branch) provides the number of veterinary, pet care (e.g., grooming), and pet supply store businesses per county; each of these three types of business generally sell some pet products&mdash;from medications and prescription diet foods, to toys and accessories&mdash;so we consider each of these types of businesses to be pet supply retailers. We calculate the total **number of pet supply retailers per county**, only for counties with three or more of _each_ of these types of businesses (required for anonymity).
-
-We used these data to determine which US counties have very few pet service businesses per pet-owning household (i.e., the density of pet-owning households per pet service business) to determine how "under-served" (or "over-served") pet owners are in each US county.
+#### Crowd-size data
+The MTA publishes weekly turnstile data that provides transit ridership as measured by turnstile entries and exits, with readings taken approximately every 4 hours. Though data is available going back to 2010, the database utilized here contains ridership data only for the year of 2018 (to correspond with the captured satellite imagery; ~10.3M rows, file size ~800 MB). Geolocations (i.e., latitude, longitude coordinates) for most MTA stations are collected from a publicly available [datafile](https://github.com/chriswhong/nycturnstiles/blob/master/geocoded.csv), though some stations were added by-hand to the [file available in this repo](https://github.com/hmlewis-astro/mta_analysis/blob/main/geocoded.csv).
 
 
 ### Algorithms
 
 #### Cleaning & EDA
-All cleaning and data analysis is carried out in Excel.
+Given the NASA Landsat 8 image, the New York City Census block shapefile is used as reference to extract spectral radiances, and derive the median temperature within each Census block; outliers are replaced with the 1st and 99th percentile temperature values. From the observed temperature variations over the land area, a "heat index" in the range of 1 to 10 is calculated and assigned to each Census block, 10 being a land area with higher than median heat, 1 with lower than median heat.
 
-From the AVMA data, we find that approximately 59% of households (~72 million households) in the US own one or more pets. Because the AVMA data give pet-ownership by state, we divide the total number of pet-owning households per state into the counties by population. For example, in a state with 100,000 pet-owning households, we assume that a county with 1% of the human population also has 1% of the pet-owning households, i.e., 1,000 households.
+Given the SQL database containing MTA turnstile data, I created a new table within that database with the available geolocation information. Using SQLAlchemy in Python, these tables are joined (on the `booth`/`C/A` and `unit`) so that each turnstile now also has an associated latitude and longitude. From the database containing all turnstile data for the year 2018, only data collected during summer months (i.e., between 06/01/2018 and 08/31/2018) were selected for this analysis.
 
-Given the CBP database, we drop rows from the data that break the total number of pet supply retailers down into subcategories based on the number of employees; we only need information about the total number of pet supply retailers, and not the number of employees at each retailer.
+I then calculated the time passed (in seconds) and the change in the turnstile `entries` counts between each reading; again, readings occur roughly every four hours. Here, there are two peculiarities in the data: (1) some turnstiles are counting backwards and (2) turnstiles appear to reset, leading to apparent increases in `entries` on the order of 10<sup>5</sup>-10<sup>7</sup> riders over just a few hours. To deal with these, I (1) always take the absolute value of the number of entries between measurements and (2) set an upper limit of 3 entries per turnstile per second. The later of these allows for a dynamic upper-limit to be set for each observation, depending on the time between measurements, rather than setting a single upper-limit.
 
 #### Aggregation
-The total number of pet supply retail establishments in each county is aggregated into a pivot table in the Excel workbook. The pivot table is joined with the table containing the number of pet-owning households per county, and this table is imported to Tableau for visualization.
+The cleaned MTA data are then aggregated by station and linename, such that the net entries over the observed three month period can be derived. From the net entries, a "crowd index" in the range of 1 to 10 is calculated for each station, 10 being the most crowded, 1 being the least.
+
+The MTA and heat data are then joined together based on the spatial location of each station.
+
+By combining the derived "heat index" and "crowd index" for each station, I calculate a "risk index" (again, scaled from 1 to 10, with 10 being high risk) for heat-illness at each station.
 
 #### Visualization
-The interactive Tableau dashboard containing these data and analyses can be downloaded [here](https://github.com/hmlewis-astro/chewy_business/raw/main/Chewy_Fulfillment_Center_EDA.twbx) or can be accessed on the web [here](https://public.tableau.com/views/ChewyFulFillmentCenterEDA/PublicDashboard?:language=en-US&:display_count=n&:origin=viz_share_link).
+Maps of the stations colored by the various indices presented here are created.
 
-**Figure**: Screencap of the interactive Tableau dashboard.
+Example: A map of New York City's subway stations, where each station location is colored by its "risk index", which considers heat-illness risk due to both high heat and large crowds. Redder colors indicate higher-risk stations.
 
 <p align="center">
-<img src="https://github.com/hmlewis-astro/chewy_business/blob/main/final_pres/chewy_dashboard_full.png" width="800" />
+<img src="https://github.com/hmlewis-astro/mta_analysis/blob/main/heat_data/data/output/analysis_out/final/plots/new-york-station-risk-index.png" width="600" />
 </p>
 
 
 ### Tools
-- Excel for data cleaning, aggregation, and analysis
-- Tableau for plotting and interactive visualizations
-
+- SQLAlchemy for querying SQL database in Python
+- Mapshapper (employed by pre-packaged analysis algorithms by the USGS) for creating and altering geographic databases
+- Pandas, GeoPandas, and Numpy for data analysis
+- GeoPandas for handling and plotting geographic data
+- Matplotlib and Tableau for plotting and interactive visualizations
 
 ### Communication
 
-In addition to the slides and visuals presented here, the Tableau dashboard [Chewy Fulfillment Center](https://public.tableau.com/views/ChewyFulFillmentCenterEDA/PublicDashboard?:language=en-US&:display_count=n&:origin=viz_share_link) will be included in a blog post to be shared on my (work-in-progress) GitHub Pages [website](https://hmlewis-astro.github.io/).
+In addition to the slides and visuals presented here, the Tableau dashboard [NYC MTA Heat](https://public.tableau.com/views/NYCMTAHeatAnalysis/Dashboard1?:language=en-US&publish=yes&:display_count=n&:origin=viz_share_link) will be included in a forthcoming blog post to be shared on my (work-in-progress) GitHub Pages [website](https://hmlewis-astro.github.io/).
+
+<p align="center">
+<img src="https://github.com/hmlewis-astro/mta_analysis/blob/main/final_pres/NYC_MTA_heat_dashboard.png" width="512" />
+</p>
