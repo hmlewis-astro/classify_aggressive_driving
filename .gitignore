@@ -13,3 +13,6 @@ UAH-DRIVESET-v1/
 # Ignore powerpoint files
 final_pres/*.pptx
 
+# Ignore old README version
+README_old.md
+
